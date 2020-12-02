@@ -1,4 +1,4 @@
-# WORDPRESS IN DOCKER
+# WORDPRESS IN DOCKER WITH BACKUP AND RESTORE
 
 ## Used images
 
@@ -16,20 +16,22 @@ Alpine image is only used for checking, whether the backup is in place.
 docker-compose up -d
 ```
 
-## Stop and Remove the containers
-
-```
-docker-compose stop
-docker-compose rm
-```
-
 ## Backup the volumes 
 
 First stop the containers and then run the backup
 
 ```
+docker-compose stop
 docker run --rm --volumes-from wordpress_db_1 -v C:\Users\marti\Projects\wordpress:/backup alpine sh -c "cd /var/lib/mysql && tar cvf /backup/wordpress_db.tar ."
 docker run --rm --volumes-from wordpress_wordpress_1 -v C:\Users\marti\Projects\wordpress:/backup alpine sh -c "cd /var/www/html && tar cvf /backup/wordpress_wp.tar ."
+```
+
+When you want to delete everything then  
+
+```
+docker-compose rm
+docker volume rm wordpress_db
+docker volume rm wordpress_wordpress
 ```
 
 ## Restore the volumes
